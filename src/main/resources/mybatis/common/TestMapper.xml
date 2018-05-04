@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.bootdo.common.dao.TestDao">
+	<sql id="selectColumn">
+		a.id,
+		a.username,
+		a.age,
+		a.sex,
+		a.address,
+		a.del_flag AS "delFlag"
+	</sql>
+	<select id="get" resultType="com.bootdo.common.domain.Test">
+		select
+		<include refid="selectColumn"></include>
+		from sys_test a where a.id = #{id}
+	</select>
+
+	<select id="list" resultType="com.bootdo.common.domain.Test">
+		select
+		<include refid="selectColumn"></include>
+		from sys_test a
+		<where>
+			<if test="id != null and id != ''"> and id = #{id} </if>
+			<if test="username != null and username != ''"> and username = #{username} </if>
+			<if test="delFlag != null and delFlag != ''"> and del_flag = #{delFlag} </if>
+		</where>
+		<choose>
+			<when test="sort != null and sort.trim() != ''">
+				order by ${sort} ${order}
+			</when>
+			<otherwise>
+				order by a.id desc
+			</otherwise>
+		</choose>
+		<if test="offset != null and limit != null">
+			limit #{offset}, #{limit}
+		</if>
+	</select>
+
+	<select id="count" resultType="int">
+		select count(*) from sys_test
+		<where>
+			<if test="id != null and id != ''"> and id = #{id} </if>
+			<if test="username != null and username != ''"> and username = #{username} </if>
+			<if test="delFlag != null and delFlag != ''"> and del_flag = #{delFlag} </if>
+		</where>
+	</select>
+
+	<insert id="save" parameterType="com.bootdo.common.domain.Test"
+		useGeneratedKeys="true" keyProperty="id">
+		insert into sys_test
+		(
+		username,
+		age,
+		sex,
+		address,
+		del_flag
+		)
+		values
+		(
+		#{username},
+		#{age},
+		#{sex},
+		#{address},
+		#{delFlag}
+		)
+	</insert>
+
+	<update id="update" parameterType="com.bootdo.common.domain.Test">
+		update sys_test
+		<set>
+			<if test="username != null">username = #{username}, </if>
+			<if test="age != null">age = #{age}, </if>
+			<if test="sex != null">sex = #{sex}, </if>
+			<if test="address != null">address = #{address}, </if>
+			<if test="delFlag != null">del_flag = #{delFlag}</if>
+		</set>
+		where id = #{id}
+	</update>
+
+	<delete id="remove">
+		delete from sys_test where id = #{id}
+	</delete>
+
+	<delete id="batchRemove">
+		delete from sys_test where id in
+		<foreach item="id" collection="array" open="(" separator=","
+			close=")">
+			#{id}
+		</foreach>
+	</delete>
+
+</mapper>

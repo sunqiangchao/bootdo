@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html>
+<meta charset="utf-8">
+<head th:include="include :: header"></head>
+
+<body class="gray-bg">
+<div>
+	<script type="text/javascript">
+			function upload1(){
+				//页面层
+				layer.open({
+				  type: 1,
+				  skin: 'layui-layer-rim', //加上边框
+				  area: ['420px', '240px'], //宽高
+				  content: $("#uploadDiv").html()
+				});
+				
+			}
+			function upload2(){
+				//页面层
+				layer.open({
+				  type: 1,
+				  skin: 'layui-layer-rim', //加上边框
+				  area: ['420px', '240px'], //宽高
+				  content: $("#uploadDiv2").html()
+				});
+				
+			}
+			 function uploadAjax(){
+				$('#submitForm2').submit();
+			} 
+			$(document).ready(function() {  
+		           $('#submitForm2').ajaxSubmit(function(message) {   
+		               alert(message);
+		           });   
+		   });   
+		</script>
+		</div>
+	<div>
+		<button type="button" class="btn  btn-primary"   onclick="upload1()">
+			<i class="fa fa-plus"></i>上传
+		</button>
+		<button type="button" class="btn  btn-primary"   onclick="upload2()">
+			<i class="fa fa-plus"></i>上传2
+		</button>
+	<div style="display: none;" id="uploadDiv">
+		<form id="submitForm"  enctype="multipart/form-data" th:action="@{/common/test/upload}" method="post" >
+			<input type="file" name="file"/>
+			<button type="submit"
+								class="btn  btn-primary" >
+								<i class="fa fa-plus" aria-hidden="true"></i>提交
+							</button>
+		</form>
+		
+	</div>
+	
+	<div style="display: none;" id="uploadDiv2">
+		<form id="submitForm2"  enctype="multipart/form-data" th:action="@{/common/test/upload2}" method="post" >
+			<input type="file" name="file"/>
+			<button type="button" onclick="uploadAjax();"
+								class="btn  btn-primary" >
+								<i class="fa fa-plus" aria-hidden="true"></i>提交
+							</button>
+		</form>
+		
+	</div>
+	</div>
+	<div class="wrapper wrapper-content ">
+		<div class="col-sm-12">
+			<div class="ibox">
+				<div class="ibox-body">
+					<div class="fixed-table-toolbar">
+						<div class="columns pull-left">
+							<button shiro:hasPermission="common:test:add" type="button"
+								class="btn  btn-primary" onclick="add()">
+								<i class="fa fa-plus" aria-hidden="true"></i>添加
+							</button>
+							<button shiro:hasPermission="common:test:batchRemove"
+								type="button" class="btn  btn-danger" onclick="batchRemove()">
+								<i class="fa fa-trash" aria-hidden="true"></i>删除
+							</button>
+						</div>
+						<div class="columns pull-right">
+							<button class="btn btn-success" onclick="reLoad()">查询</button>
+						</div>
+						<div class="columns pull-right col-md-2">
+							<input id="searchName" type="text" class="form-control"
+								placeholder="">
+						</div>
+						
+					</div>
+					<table id="exampleTable" data-mobile-responsive="true">
+					</table>
+				</div>
+			</div>
+		</div>
+	</div>
+	<!--shiro控制bootstraptable行内按钮看见性 来自bootdo的创新方案 -->
+	<div>
+		<script type="text/javascript">
+			var s_edit_h = 'hidden';
+			var s_remove_h = 'hidden';
+			var s_resetPwd_h = 'hidden';
+		</script>
+	</div>
+	<div shiro:hasPermission="common:test:edit">
+		<script type="text/javascript">
+			s_edit_h = '';
+		</script>
+	</div>
+	<div shiro:hasPermission="common:test:remove">
+		<script type="text/javascript">
+			s_remove_h = '';
+		</script>
+	</div>
+	<!-- <div shiro:hasPermission="common:test:add">
+		<script type="text/javascript">
+			var s_add_h = '';
+		</script>
+	</div> -->
+
+	</div>
+	<div th:include="include :: footer"></div>
+	<script type="text/javascript"
+		src="/js/appjs/common/test/test.js"></script>
+		<script type="text/javascript"
+		src="/js/jquery.form.js"></script>
+</body>
+</html>
