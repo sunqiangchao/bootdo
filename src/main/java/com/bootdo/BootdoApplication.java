@@ -11,6 +11,7 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 @MapperScan("com.bootdo.*.dao")
 @SpringBootApplication
 public class BootdoApplication {
+
     public static void main(String[] args) {
         /*
             主程序
